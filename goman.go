@@ -35,7 +35,7 @@ Most Go binaries come without any man page. The tool `goman` fills this gap. If 
 
 <!--more-->
 
-It kept happening to me: I type `man <blah>` to get the man page of `<blah>`, only to find out that `<blah>` is a Go binary and hence has no man page (unless the author took the time to write one and include it in the [Homebrew|(brew.sh) formula.)
+It kept happening to me: I type `man <blah>` to get the man page of `<blah>`, only to find out that `<blah>` is a Go binary and hence has no man page (except for rare cases where the author took the time to write one and distribute it along with the binary via some installation manager like [Homebrew](https://brew.sh).)
 
 Well, not anymore.
 
@@ -90,11 +90,20 @@ This diagram shows where `goman` searches for READMEs - if you seek some diversi
 
 HYPE[how goman searches READMEs](goman.html)
 
+
+## Step 4: Render Markdown as colored ANSI text
+
+Markdown renderers usually produce HTML, in some cases PDF, and, if they value traditional typesetting, also LaTeX. Plain text with ANSI color codes is far less widespread.
+
+Again, luck was on my side. [This fork of blackfriday](https://github.com/ec1oud/blackfriday) implements an ANSI renderer for Markdown. So getting color-coded ANSI output from a README file required little more than copying a couple of lines from [mdcat](https://github.com/ec1oud/mdcat) that uses the ANSI renderer under the hood.
+
+Done.
+
 ## Get goman
 
 Get `goman` via `go get`:
 
-    go get -d github.com/christophberger/goman
+    go get -u github.com/christophberger/goman
 
 ## Usage
 
