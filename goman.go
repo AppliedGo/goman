@@ -19,51 +19,72 @@ Comments and code in this file are used for describing and explaining a particul
 -->
 
 +++
-title = ""
-description = ""
+title = "goman - the missing man pages for Go binaries"
+description = "A Go binary without a man page? goman displays the project's README file instead."
 author = "Christoph Berger"
 email = "chris@appliedgo.net"
-date = "2017-00-00"
+date = "2017-06-25"
 draft = "true"
-domains = [""]
-tags = ["", "", ""]
-categories = ["Tutorial"]
+domains = ["DevOps"]
+tags = ["man", "man page"]
+categories = ["Tools and Libraries"]
 +++
 
 ### Summary goes here
 
+Most Go binaries come without any man page. The tool `goman` fills this gap. If the corresponding project includes a decent README file (and most projects do), `goman` find this README file and displays it on the terminal.
+
 <!--more-->
 
-## Intro goes here
+It kept happening to me: I type `man <blah>` to get the man page of `<blah>`, only to find out that `<blah>` is a Go binary and hence has no man page (unless the author took the time to write one and include it in the [Homebrew|(brew.sh) formula.)
 
-## The code
-*/
+Well, not anymore.
 
-// ## Imports and globals
-package main
+I wrote a tool named [`goman`](https://github.com/christophberger/goman) to get me some info about a Go binary when `man` can't.
 
-/*
-## How to get and run the code
+![goman logo](goman.png)
 
-Step 1: `go get` the code. Note the `-d` flag that prevents auto-installing
-the binary into `$GOPATH/bin`.
+From now on, when `man` finds no man page, `goman` will take a second attempt and try displaying the README file from the binary's project sources. This usually succeeds if the binary is a Go binary, and if this binary has a corresponding project either locally or on GitHub or GitLab.
 
-    go get -d github.com/appliedgo/TODO:
+This demo shows `goman`, `goman` with `less -R`, and `goman` launched by a bash script if `man` finds no man page.
 
-Step 2: `cd` to the source code directory.
+![goman demo](goman.gif)
 
-    cd $GOPATH/src/github.com/appliedgo/TODO:
-
-Step 3. Run the binary.
-
-    go run TODO:.go
+Here is how it works.
 
 
-## Odds and ends
-## Some remarks
-## Tips
-## Links
+## Step 1: Locate the binary
 
+A Go binary must reside within one of the directories contained in `$PATH`, or else I would not be able to call it from the command line. And when I run `man <binary>`, then the binary must be the first one of that name. So to find the binary, we simply need to do the same as the command `which` does.
+
+Luckily, this is as easy as go-getting the `which` package from [bfontaine/which](https://github.com/bfontaine/which) and calling `which.One(name)`. Actually, `goman` also calls `which.OneWithPath(name, path)` in order to locate the binary also in `$GOPATH/bin` or in the current path, in case any of the two is not included in `$PATH`.
+
+
+## Step 2: Get the binary to reveal its source
+
+Here is a maybe little-known fact: Go binaries contain the path of their source code project. With the help of the packages `debug/elf`, `debug/gosym`, and `debug/macho`, `goman` dives into the symbol table of the binary and locates the symbol "main.main". The text of this symbol is the path to the source code, relative to GOPATH (and sometimes it is an absolute path, but in this case, `goman` takes a guess and cuts off the path prefix up to the first occurrence of `/src/`, which is supposed to be the `/src/` directory right beneath GOPATH).
+
+The code for reading the symbol table is taken from the [`gorebuild` tool](https://github.com/FiloSottile/gorebuild). As `gorebuild` is no library, I copied over `dwarf.go` that contains all the code I need for that, with an API as simple as `getMainPath(file)`.
+
+
+## Step 3: Locate the README file
+
+This part turned out to be a bit more complex. `goman` needs to find a README file that is either a Markdown file or a plain text file, which means we need to look for several possible file extensions: `.md`, `.markdown`, `.txt`, and no extension at all. (GitHub supports other markup langauges besides Markdown, but I find they are so rare that I can safely ignore them.)
+
+In addition to that, a command can either reside in the project root, or in a `/cmd/abc` subproject. Sometimes the `/cmd/abc` subprojects contain their own README file but in most cases they don't. So `goman` has to check both the supbroject and the root project for a README file.
+
+And if this is not enough, the source code may or may not exist on the local machine. The Go binary might have been installed via Homebrew or some other package manager, or the source code might have been removed after installing the binary.
+In this case, `goman` must also look into the public repository of the project (which nowadays is mostly GitHub, GitLab, or BitBucket.)
+
+<!--
+Last not least, the URL to the remote repository might be a canonical URL which gets redirected to a "real" URL.
+-->
+
+## Get goman
+
+Get `goman` via `go get`:
+
+    go get -d github.com/christophberger/goman
 
 **Happy coding!**
 
