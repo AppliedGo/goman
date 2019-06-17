@@ -25,9 +25,9 @@ author = "Christoph Berger"
 email = "chris@appliedgo.net"
 date = "2017-06-26"
 draft = "false"
-domains = ["DevOps"]
+categories = ["DevOps"]
 tags = ["man", "man page"]
-categories = ["Tools and Libraries"]
+articletypes = ["Tools and Libraries"]
 +++
 
 
