@@ -39,7 +39,7 @@ It kept happening to me: I type `man <blah>` to get the man page of `<blah>`, on
 
 Well, not anymore.
 
-I wrote a tool named [`goman`](https://github.com/christophberger/goman) to get me some info about a Go binary when `man` can't.
+I wrote a tool named [`goman`](https://github.com/appliedgocode/goman) to get me some info about a Go binary when `man` can't.
 
 ![goman logo](goman.png)
 
@@ -103,11 +103,11 @@ Done.
 
 Get `goman` via `go get`:
 
-    go get -u github.com/christophberger/goman
+    go get -u github.com/appliedgocode/goman
 
 ## Usage
 
-It's all in the [README](https://github.com/christophberger/goman/blob/master/README.md), so simply type `goman goman` ;-)
+It's all in the [README](https://github.com/appliedgocode/goman/blob/master/README.md), so simply type `goman goman` ;-)
 
 TL;DR:
 
@@ -120,5 +120,9 @@ goman <binary> | less -R  # same but with paging
 And a shell script can make `goman` blend in with the standard `man` command, to auto-reveal the README if the binary has no man page. (See the README for instructions.)
 
 **Happy coding!**
+
+- - -
+
+*Update 2020-12-14: moved repo from christophberger/goman to appliedgocode/goman*
 
 */
