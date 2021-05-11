@@ -101,6 +101,16 @@ Done.
 
 ## Get goman
 
+**Update:** `goman` is available via Homebrew on macOS, Linux, and WSL:
+
+```sh
+brew tap appliedgo/tools
+brew install goman
+```
+
+(Read more about providing your Go tools via Homebrew [here]({{< ref "/release2" >}}).)
+
+
 Get `goman` via `go get`:
 
     go get -u github.com/appliedgocode/goman
@@ -124,5 +134,7 @@ And a shell script can make `goman` blend in with the standard `man` command, to
 - - -
 
 *Update 2020-12-14: moved repo from christophberger/goman to appliedgocode/goman*
+
+*Update 2021-05-10: `goman` can be installed via Homebrew*
 
 */
