@@ -51,7 +51,7 @@ This demo shows
 * `goman` with `less -R`, and
 * `goman` launched by a bash script if `man` finds no man page.
 
-[![goman demo](goman.gif)](/media/goman/goman.gif)
+[![goman demo](goman.gif)]media/goman.gif
 *(Click to enlarge)*
 
 Here is how it works.
