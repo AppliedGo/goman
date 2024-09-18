@@ -108,7 +108,7 @@ brew tap appliedgo/tools
 brew install goman
 ```
 
-(Read more about providing your Go tools via Homebrew [here]({{< ref "/release2" >}}).)
+(Read more about providing your Go tools via Homebrew [here]({{< ref "/post/release2" >}}).)
 
 
 Get `goman` via `go get`:
